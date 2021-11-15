@@ -90,6 +90,12 @@ variable "alb_ingress_cidr_blocks" {
   default     = ["0.0.0.0/0"]
 }
 
+variable "alb_ingress_security_group_ids" {
+  description = "List of source security groups to use on all ingress rules of the ALB."
+  type        = list(string)
+  default     = []
+}
+
 variable "alb_log_bucket_name" {
   description = "S3 bucket (externally created) for storing load balancer access logs. Required if alb_logging_enabled is true."
   type        = string

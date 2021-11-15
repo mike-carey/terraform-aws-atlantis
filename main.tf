@@ -302,6 +302,10 @@ module "alb_https_sg" {
   description = "Security group with HTTPS ports open for specific IPv4 CIDR block (or everybody), egress ports are all world open"
 
   ingress_cidr_blocks = sort(compact(concat(var.allow_github_webhooks ? var.github_webhooks_cidr_blocks : [], var.alb_ingress_cidr_blocks)))
+  ingress_with_source_security_group_id = [for sgid in var.alb_ingress_security_group_ids : {
+    rule                     = "https-443-tcp"
+    source_security_group_id = sgid
+  }]
 
   tags = merge(local.tags, var.alb_https_security_group_tags)
 }
@@ -315,6 +319,10 @@ module "alb_http_sg" {
   description = "Security group with HTTP ports open for specific IPv4 CIDR block (or everybody), egress ports are all world open"
 
   ingress_cidr_blocks = sort(compact(concat(var.allow_github_webhooks ? var.github_webhooks_cidr_blocks : [], var.alb_ingress_cidr_blocks)))
+  ingress_with_source_security_group_id = [for sgid in var.alb_ingress_security_group_ids : {
+    rule                     = "http-80-tcp"
+    source_security_group_id = sgid
+  }]
 
   tags = merge(local.tags, var.alb_http_security_group_tags)
 }
